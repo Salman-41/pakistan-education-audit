@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pakistan Education Policy Audit (2013-2016)
 
-## Getting Started
+An interactive research publication presenting Pakistan's 2013-2016 education data through high-end cinematic frontend design. This project translates complex policy analysis into clear, visually-driven narratives using minimal, calm design with intentional motion.
 
-First, run the development server:
+## í¼Ÿ Vision
+Build an **Awwwards-level interactive research website** that bridges the gap between raw data and public understanding. The site uses "Research-Grade Motion" to emphasize findings without distracting the reader.
 
+## í»  Tech Stack
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Animation**: [GSAP](https://gsap.com/) with ScrollTrigger for parallax and scroll-linked reveals
+- **Smooth Scroll**: [Lenis](https://lenis.darkroom.engineering/) for momentum-based interaction
+- **Visualizations**: [p5.js](https://p5js.org/) for generative data art and interactive maps
+- **Deployment**: Optimized for Vercel
+
+## í³– Narrative Structure
+The site unfolds in 5 distinct chapters:
+1. **CONTEXT**: Framing the importance of Pakistan's education landscape.
+2. **DISPARITIES**: Visualizing regional and gender-based divides.
+3. **SYSTEMS VIEW**: Exploring causality between resources, security, and outcomes.
+4. **HIDDEN PATTERNS**: Highlighting counter-intuitive findings and positive deviance.
+5. **INTERPRETATION**: Policy implications and confidence-based synthesis.
+
+## í³Š Data Source
+Utilizes the [Kaggle Pakistan Education Performance Dataset](https://www.kaggle.com/datasets/mesumraza/pakistan-education-performance-dataset), processed into static JSON specs for high-performance rendering.
+
+## íº€ Getting Started
+
+First, install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run the development server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the interactive publication.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## í²Ž Design Principles
+- **Editorial First**: Content-driven layout with generous white space.
+- **Intentional Motion**: Every animation answers "What changed?" or "Where should I look?".
+- **Calm Confidence**: A sophisticated light-theme palette (Slate & Emerald) designed for long-form reading.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Created as part of the Pakistan Education Research Initiative.*
