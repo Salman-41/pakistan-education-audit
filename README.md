@@ -30,7 +30,7 @@ The heart of the project lies in the [Exploratory Data Analysis (EDA)](notebook/
 - **Visualizations**: p5.js (Generative Particle Maps)
 - **Styling**: Tailwind CSS 4
 
-## ��� Narrative Structure
+## Narrative Structure
 
 The site unfolds in 5 distinct chapters, each answering a critical policy question:
 
