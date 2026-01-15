@@ -1,56 +1,64 @@
 # Pakistan Education Policy Audit (2013-2016)
 
-An interactive research publication presenting Pakistan's 2013-2016 education data through high-end cinematic frontend design. This project translates complex policy analysis into clear, visually-driven narratives using minimal, calm design with intentional motion.
+**A Research-to-Interactive Data Publication**
 
-## Vision
+This project follows a "Data-First" philosophy: fundamental research and metric engineering were conducted in **Python**, then translated into an **interactive cinematic experience** using modern web technologies.
 
-Build an **Awwwards-level interactive research website** that bridges the gap between raw data and public understanding. The site uses "Research-Grade Motion" to emphasize findings without distracting the reader.
+## The Research Workflow
 
-## Tech Stack
+Unlike traditional websites, this platform is a direct extension of a data science pipeline:
 
-- **Framework**: [Next.js](https://nextjs.org/) (App Router)
-- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **Animation**: [GSAP](https://gsap.com/) with ScrollTrigger for parallax and scroll-linked reveals
-- **Smooth Scroll**: [Lenis](https://lenis.darkroom.engineering/) for momentum-based interaction
-- **Visualizations**: [p5.js](https://p5js.org/) for generative data art and interactive maps
-- **Deployment**: Optimized for Vercel
+1.  **Analysis (Python)**: Raw data from Kaggle was cleaned and analyzed in a Jupyter environment.
+2.  **Engineering**: Multi-dimensional metrics (GPI, SFS, ICC) were calculated to reveal hidden patterns.
+3.  **Presentation (Next.js)**: The findings were materialized into an Awwwards-level interactive narrative using GSAP and p5.js.
 
-## Narrative Structure
+## Data Science Core (Python & Jupyter)
 
-The site unfolds in 5 distinct chapters:
+The heart of the project lies in the [Exploratory Data Analysis (EDA)](notebook/pakistan_education_analysis.ipynb).
 
-1. **CONTEXT**: Framing the importance of Pakistan's education landscape.
-2. **DISPARITIES**: Visualizing regional and gender-based divides.
-3. **SYSTEMS VIEW**: Exploring causality between resources, security, and outcomes.
-4. **HIDDEN PATTERNS**: Highlighting counter-intuitive findings and positive deviance.
-5. **INTERPRETATION**: Policy implications and confidence-based synthesis.
+- **Metric Engineering**:
+  - **GPI**: Gender Parity Index for enrollment equality.
+  - **SFS**: Security Fragility Score (log-normalized threat assessment).
+  - **ICC**: Infrastructure Composite Index for resource mapping.
+- **Transparency**: Every chart on the website corresponds to an analysis cell in the notebook.
 
-## Data Source
+## Cinematic Tech Stack
 
-Utilizes the [Kaggle Pakistan Education Performance Dataset](https://www.kaggle.com/datasets/mesumraza/pakistan-education-performance-dataset), processed into static JSON specs for high-performance rendering.
+- **Data Pipeline**: Python (Pandas, NumPy, Plotly) via [Jupyter Notebook](notebook/pakistan_education_analysis.ipynb)
+- **Framework**: Next.js (App Router)
+- **Animation**: GSAP (ScrollTrigger) & Lenis (Smooth Scroll)
+- **Visualizations**: p5.js (Generative Particle Maps)
+- **Styling**: Tailwind CSS 4
+
+## ��� Narrative Structure
+
+The site unfolds in 5 distinct chapters, each answering a critical policy question:
+
+1. **CONTEXT**: Why Pakistan's education landscape matters.
+2. **DISPARITIES**: Where the regional and gender divides are deepest.
+3. **SYSTEMS VIEW**: How resources, security, and outcomes interact.
+4. **HIDDEN PATTERNS**: Positive deviance and resilience in conflict zones.
+5. **INTERPRETATION**: What the data suggests for future policy.
+
+## Design Philosophy
+
+- **Research-Grade Motion**: Animations are descriptive, not decorative.
+- **Calm Confidence**: A sophisticated light-theme (Slate & Emerald) designed for long-form editorial reading.
+- **Full-Width Canvas**: Immersive interaction that respects the scale of the data.
 
 ## Getting Started
 
-First, install dependencies:
+**Frontend:**
 
 ```bash
-npm install
+npm install && npm run dev
 ```
 
-Run the development server:
+**Research Notebook:**
 
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the interactive publication.
-
-## Design Principles
-
-- **Editorial First**: Content-driven layout with generous white space.
-- **Intentional Motion**: Every animation answers "What changed?" or "Where should I look?".
-- **Calm Confidence**: A sophisticated light-theme palette (Slate & Emerald) designed for long-form reading.
+1. Navigate to `/notebook`
+2. Run `pakistan_education_analysis.ipynb` in any Jupyter environment.
 
 ---
 
-_Created as part of the Pakistan Education Research Initiative._
+_Developed by Salman — Bridging the gap between Data Science and Digital Storytelling._
