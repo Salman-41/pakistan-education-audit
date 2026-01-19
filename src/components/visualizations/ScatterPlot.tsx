@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import type p5Type from "p5";
 import { REGION_PALETTE, sampleCities, CityData } from "@/lib/data";
 
@@ -18,11 +18,32 @@ export function ScatterPlot({
   const containerRef = useRef<HTMLDivElement>(null);
   const p5InstanceRef = useRef<p5Type | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 600, height: 400 });
+
+  // Handle resize
+  const updateDimensions = useCallback(() => {
+    if (containerRef.current) {
+      const containerWidth = containerRef.current.clientWidth;
+      const width = Math.min(containerWidth, 700);
+      const height = Math.min(400, width * 0.65);
+      setDimensions({ width, height });
+    }
+  }, []);
 
   useEffect(() => {
     setMounted(true);
-    return () => setMounted(false);
-  }, []);
+    updateDimensions();
+
+    const handleResize = () => {
+      updateDimensions();
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      setMounted(false);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [updateDimensions]);
 
   useEffect(() => {
     if (!mounted || !containerRef.current) return;
@@ -43,9 +64,12 @@ export function ScatterPlot({
       const cities: CityData[] = [...sampleCities];
 
       const sketch = (p: p5Type) => {
-        const width = 600;
-        const height = 450;
-        const margin = { top: 30, right: 30, bottom: 50, left: 60 };
+        const width = dimensions.width;
+        const height = dimensions.height;
+        const isMobile = width < 500;
+        const margin = isMobile
+          ? { top: 20, right: 15, bottom: 45, left: 45 }
+          : { top: 30, right: 30, bottom: 50, left: 60 };
 
         let hoveredCity: CityData | null = null;
 
@@ -83,28 +107,29 @@ export function ScatterPlot({
         const getXLabel = () => {
           switch (xMetric) {
             case "icc":
-              return "Infrastructure Composite Index";
+              return isMobile ? "Infrastructure Index" : "Infrastructure Composite Index";
             case "sfs":
-              return "Security Fragility Score";
+              return isMobile ? "Security Score" : "Security Fragility Score";
             case "gpi":
-              return "Gender Parity Index";
+              return isMobile ? "Gender Parity" : "Gender Parity Index";
           }
         };
 
         const getYLabel = () => {
           switch (yMetric) {
             case "learningScore":
-              return "Learning Score";
+              return isMobile ? "Learning" : "Learning Score";
             case "retentionScore":
-              return "Retention Score";
+              return isMobile ? "Retention" : "Retention Score";
             case "educationScore":
-              return "Education Score";
+              return isMobile ? "Education" : "Education Score";
           }
         };
 
         p.setup = () => {
           const canvas = p.createCanvas(width, height);
           canvas.style("display", "block");
+          canvas.style("border-radius", "8px");
         };
 
         p.draw = () => {
@@ -140,12 +165,12 @@ export function ScatterPlot({
           // Axis labels
           p.noStroke();
           p.fill(100, 116, 139);
-          p.textSize(11);
+          p.textSize(isMobile ? 9 : 11);
           p.textAlign(p.CENTER, p.TOP);
-          p.text(getXLabel(), width / 2, height - 15);
+          p.text(getXLabel(), width / 2, height - (isMobile ? 12 : 15));
 
           p.push();
-          p.translate(15, height / 2);
+          p.translate(isMobile ? 12 : 15, height / 2);
           p.rotate(-p.HALF_PI);
           p.text(getYLabel(), 0, 0);
           p.pop();
@@ -160,10 +185,12 @@ export function ScatterPlot({
             const x = xScale(xVal);
             const y = yScale(yVal);
 
-            // Size based on population
-            const size = p.map(city.population, 100000, 15000000, 8, 30);
+            // Size based on population - smaller on mobile
+            const baseSize = isMobile ? 6 : 8;
+            const maxSize = isMobile ? 20 : 30;
+            const size = p.map(city.population, 100000, 15000000, baseSize, maxSize);
 
-            // Check hover
+            // Check hover (with touch support)
             const dist = p.dist(p.mouseX, p.mouseY, x, y);
             if (dist < size + 5) {
               hoveredCity = city;
@@ -193,9 +220,9 @@ export function ScatterPlot({
             const x = xScale(xVal);
             const y = yScale(yVal);
 
-            // Tooltip box
-            const tooltipWidth = 180;
-            const tooltipHeight = 80;
+            // Tooltip box - smaller on mobile
+            const tooltipWidth = isMobile ? 140 : 180;
+            const tooltipHeight = isMobile ? 70 : 80;
             let tooltipX = x + 15;
             let tooltipY = y - tooltipHeight / 2;
 
@@ -218,16 +245,16 @@ export function ScatterPlot({
 
             p.noStroke();
             p.fill(15, 23, 42);
-            p.textSize(12);
+            p.textSize(isMobile ? 10 : 12);
             p.textAlign(p.LEFT, p.TOP);
-            p.text(city.city, tooltipX + 12, tooltipY + 12);
+            p.text(city.city, tooltipX + 10, tooltipY + 10);
 
             p.fill(100, 116, 139);
-            p.textSize(10);
-            p.text(city.province, tooltipX + 12, tooltipY + 30);
+            p.textSize(isMobile ? 9 : 10);
+            p.text(city.province, tooltipX + 10, tooltipY + (isMobile ? 24 : 28));
 
             p.fill(37, 99, 235);
-            p.textSize(11);
+            p.textSize(isMobile ? 9 : 11);
             const xLabel = xMetric.toUpperCase();
             const yLabel =
               yMetric === "learningScore"
@@ -237,13 +264,13 @@ export function ScatterPlot({
                 : "Education";
             p.text(
               `${xLabel}: ${xVal.toFixed(2)}`,
-              tooltipX + 12,
-              tooltipY + 48
+              tooltipX + 10,
+              tooltipY + (isMobile ? 40 : 46)
             );
             p.text(
               `${yLabel}: ${yVal.toFixed(1)}`,
-              tooltipX + 12,
-              tooltipY + 64
+              tooltipX + 10,
+              tooltipY + (isMobile ? 52 : 60)
             );
           }
 
@@ -279,13 +306,16 @@ export function ScatterPlot({
         p5InstanceRef.current.remove();
       }
     };
-  }, [xMetric, yMetric, mounted]);
+  }, [xMetric, yMetric, mounted, dimensions]);
 
   if (!mounted) {
     return (
       <div className="viz-container">
         <div className="viz-title">{title}</div>
-        <div className="h-[450px] bg-slate-100 rounded-lg animate-pulse" />
+        <div 
+          className="bg-slate-100 rounded-lg animate-pulse" 
+          style={{ height: dimensions.height }}
+        />
       </div>
     );
   }
@@ -295,7 +325,7 @@ export function ScatterPlot({
       <div className="viz-title">{title}</div>
       <div
         ref={containerRef}
-        className="p5-container rounded-lg overflow-hidden"
+        className="p5-container rounded-lg overflow-hidden flex justify-center"
       />
       <p className="viz-caption">
         Point size indicates population. Hover for details. Trend line shows

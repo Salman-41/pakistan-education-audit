@@ -87,7 +87,7 @@
 @theme inline {
   --color-background: var(--bg-primary);
   --color-foreground: var(--text-primary);
-  --font-sans: var(--font-body);
+  --font-sans: var(--font-display);
   --font-mono: var(--font-mono);
 }
 
@@ -549,4 +549,101 @@ a:hover {
 .prose li {
   margin-bottom: var(--space-2);
   color: var(--text-secondary);
+}
+
+/* ---------- Mobile Improvements ---------- */
+@media (max-width: 640px) {
+  .headline-xl {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+  
+  .headline-lg {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+  
+  .body-lg {
+    font-size: 1rem;
+  }
+  
+  .section {
+    padding-block: var(--space-12);
+  }
+  
+  .section-lg {
+    padding-block: var(--space-16);
+  }
+  
+  .viz-container {
+    padding: var(--space-4);
+  }
+  
+  .stat-card {
+    padding: var(--space-4);
+  }
+  
+  .stat-value {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+}
+
+/* ---------- Touch Targets ---------- */
+@media (pointer: coarse) {
+  button, 
+  [role="button"],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ---------- Smooth Scroll ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Better Focus Indicators ---------- */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------- Print Styles ---------- */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .viz-container {
+    break-inside: avoid;
+  }
 }

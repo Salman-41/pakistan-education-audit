@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { correlationMatrix } from "@/lib/data";
 
 const metrics = ["Education Score", "Learning Score", "ICC", "GPI", "SFS"];
@@ -10,6 +10,25 @@ export function CorrelationHeatmap() {
     row: string;
     col: string;
   } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [cellSize, setCellSize] = useState(80);
+  const [labelWidth, setLabelWidth] = useState(120);
+
+  // Handle resize
+  const updateDimensions = useCallback(() => {
+    if (containerRef.current) {
+      const containerWidth = containerRef.current.clientWidth;
+      const isMobile = containerWidth < 500;
+      setCellSize(isMobile ? 50 : 70);
+      setLabelWidth(isMobile ? 80 : 100);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, [updateDimensions]);
 
   // Build matrix from correlation data
   const getCorrelation = (metric1: string, metric2: string): number => {
@@ -33,25 +52,24 @@ export function CorrelationHeatmap() {
     }
   };
 
-  const cellSize = 80;
-  const labelWidth = 120;
+  const isMobile = cellSize < 60;
 
   return (
-    <div className="viz-container">
+    <div className="viz-container" ref={containerRef}>
       <div className="viz-title">Metric Correlation Matrix</div>
 
-      <div className="overflow-x-auto">
-        <div className="inline-block">
+      <div className="overflow-x-auto -mx-2 px-2">
+        <div className="inline-block min-w-fit">
           {/* Column headers */}
           <div className="flex" style={{ marginLeft: labelWidth }}>
             {metrics.map((metric) => (
               <div
                 key={metric}
-                className="text-xs text-slate-500 font-mono text-center font-medium"
+                className="text-[10px] md:text-xs text-slate-500 font-mono text-center font-medium"
                 style={{ width: cellSize }}
               >
                 <span className="block transform -rotate-45 origin-left translate-y-4 whitespace-nowrap">
-                  {metric}
+                  {isMobile ? metric.split(" ")[0] : metric}
                 </span>
               </div>
             ))}
@@ -63,10 +81,10 @@ export function CorrelationHeatmap() {
               <div key={rowMetric} className="flex items-center">
                 {/* Row label */}
                 <div
-                  className="text-xs text-slate-500 font-mono text-right pr-4 truncate font-medium"
+                  className="text-[10px] md:text-xs text-slate-500 font-mono text-right pr-2 md:pr-4 truncate font-medium"
                   style={{ width: labelWidth }}
                 >
-                  {rowMetric}
+                  {isMobile ? rowMetric.split(" ")[0] : rowMetric}
                 </div>
 
                 {/* Cells */}
@@ -99,17 +117,23 @@ export function CorrelationHeatmap() {
                       className={`
                         flex items-center justify-center cursor-pointer
                         transition-all duration-200 border border-slate-200
+                        rounded-sm
                         ${
-                          isHovered ? "ring-2 ring-blue-500 z-10 scale-105" : ""
+                          isHovered ? "ring-2 ring-blue-500 z-10 scale-105 shadow-lg" : ""
                         }
                       `}
                       onMouseEnter={() =>
                         setHoveredCell({ row: rowMetric, col: colMetric })
                       }
                       onMouseLeave={() => setHoveredCell(null)}
+                      onTouchStart={() =>
+                        setHoveredCell({ row: rowMetric, col: colMetric })
+                      }
+                      role="cell"
+                      aria-label={`Correlation between ${rowMetric} and ${colMetric}: ${value.toFixed(2)}`}
                     >
                       <span
-                        className={`font-mono text-sm ${
+                        className={`font-mono text-xs md:text-sm ${
                           isDiagonal
                             ? "text-white font-bold"
                             : value > 0
@@ -129,7 +153,7 @@ export function CorrelationHeatmap() {
       </div>
 
       {/* Legend */}
-      <div className="mt-6 flex items-center justify-center gap-8 text-xs">
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-xs">
         <div className="flex items-center gap-2">
           <div
             className="w-4 h-4 rounded"
@@ -144,6 +168,13 @@ export function CorrelationHeatmap() {
           />
           <span className="text-slate-500">Positive correlation</span>
         </div>
+        <div className="flex items-center gap-2">
+          <div
+            className="w-4 h-4 rounded"
+            style={{ backgroundColor: "rgba(37, 99, 235, 0.9)" }}
+          />
+          <span className="text-slate-500">Self (1.0)</span>
+        </div>
       </div>
 
       {/* Insight */}
@@ -152,7 +183,7 @@ export function CorrelationHeatmap() {
           <span className="text-blue-600 font-mono font-semibold">
             {hoveredCell.row}
           </span>
-          <span className="text-slate-500"> × </span>
+          <span className="text-slate-500"> x </span>
           <span className="text-blue-600 font-mono font-semibold">
             {hoveredCell.col}
           </span>

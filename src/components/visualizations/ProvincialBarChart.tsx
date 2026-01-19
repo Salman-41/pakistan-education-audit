@@ -61,10 +61,15 @@ export function ProvincialBarChart({
   };
 
   return (
-    <div ref={chartRef} className="viz-container">
+    <div 
+      ref={chartRef} 
+      className="viz-container"
+      role="figure"
+      aria-label={`Bar chart showing ${getLabel()} by province`}
+    >
       <div className="viz-title">{getLabel()} by Province</div>
 
-      <div className="space-y-3">
+      <div className="space-y-2 md:space-y-3">
         {sortedStats.map((stat, index) => {
           const value = stat[metric].mean;
           const percentage = (value / maxValue) * 100;
@@ -77,23 +82,23 @@ export function ProvincialBarChart({
               onMouseEnter={() => setHoveredProvince(stat.province)}
               onMouseLeave={() => setHoveredProvince(null)}
             >
-              <div className="flex items-center gap-4">
-                {/* Rank */}
-                <span className="w-6 text-xs font-mono text-slate-400">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+            <div className="flex items-center gap-2 md:gap-4">
+              {/* Rank */}
+              <span className="w-5 md:w-6 text-[10px] md:text-xs font-mono text-slate-400">
+                {String(index + 1).padStart(2, "0")}
+              </span>
 
-                {/* Province name */}
-                <span
-                  className={`w-24 text-sm font-medium transition-colors duration-200 ${
-                    isHovered ? "text-slate-900" : "text-slate-600"
-                  }`}
-                >
-                  {stat.province}
-                </span>
+              {/* Province name */}
+              <span
+                className={`w-16 md:w-24 text-xs md:text-sm font-medium transition-colors duration-200 truncate ${
+                  isHovered ? "text-slate-900" : "text-slate-600"
+                }`}
+              >
+                {stat.province}
+              </span>
 
-                {/* Bar container */}
-                <div className="flex-1 h-8 bg-slate-100 rounded relative overflow-hidden">
+              {/* Bar container */}
+              <div className="flex-1 h-6 md:h-8 bg-slate-100 rounded relative overflow-hidden">
                   {/* Bar fill */}
                   <div
                     className="bar-fill absolute inset-y-0 left-0 rounded transition-all duration-300"
@@ -122,31 +127,31 @@ export function ProvincialBarChart({
                   )}
                 </div>
 
-                {/* Value */}
-                <span
-                  className={`w-16 text-right font-mono text-sm transition-colors duration-200 ${
-                    isHovered ? "text-blue-600 font-semibold" : "text-slate-500"
-                  }`}
-                >
-                  {metric === "gpi" || metric === "icc"
-                    ? value.toFixed(2)
-                    : value.toFixed(1)}
-                </span>
-              </div>
+              {/* Value */}
+              <span
+                className={`w-12 md:w-16 text-right font-mono text-xs md:text-sm transition-colors duration-200 ${
+                  isHovered ? "text-blue-600 font-semibold" : "text-slate-500"
+                }`}
+              >
+                {metric === "gpi" || metric === "icc"
+                  ? value.toFixed(2)
+                  : value.toFixed(1)}
+              </span>
+            </div>
 
-              {/* Expanded details on hover */}
-              {isHovered &&
-                showLabels &&
-                (metric === "educationScore" || metric === "learningScore") && (
-                  <div className="ml-10 mt-2 pl-24 text-xs text-slate-500 animate-fade-in">
-                    <span>{stat.cityCount} cities</span>
-                    <span className="mx-2">•</span>
-                    <span>
-                      Range: {stat[metric].min.toFixed(1)} –{" "}
-                      {stat[metric].max.toFixed(1)}
-                    </span>
-                  </div>
-                )}
+            {/* Expanded details on hover */}
+            {isHovered &&
+              showLabels &&
+              (metric === "educationScore" || metric === "learningScore") && (
+                <div className="ml-5 md:ml-10 mt-2 pl-16 md:pl-24 text-[10px] md:text-xs text-slate-500 animate-fade-in">
+                  <span>{stat.cityCount} cities</span>
+                  <span className="mx-2">-</span>
+                  <span>
+                    Range: {stat[metric].min.toFixed(1)} -{" "}
+                    {stat[metric].max.toFixed(1)}
+                  </span>
+                </div>
+              )}
             </div>
           );
         })}

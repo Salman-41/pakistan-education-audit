@@ -153,7 +153,7 @@ export function Section({
               </h2>
             )}
             {subtitle && (
-              <p className="section-subtitle text-lg md:text-xl text-slate-600 leading-relaxed">
+              <p className="section-subtitle text-lg md:text-xl text-slate-600 leading-relaxed max-w-3xl">
                 {subtitle}
               </p>
             )}

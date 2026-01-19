@@ -1,18 +1,24 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
-  variable: "--font-inter",
+  variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains",
+  variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#fafafa",
+};
 
 export const metadata: Metadata = {
   title: "Pakistan Education Analysis | A Data-Driven Policy Audit",
@@ -40,10 +46,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-[#fafafa]`}
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#fafafa] text-slate-900`}
       >
+        <a href="#context" className="skip-link">
+          Skip to main content
+        </a>
         {children}
       </body>
     </html>
